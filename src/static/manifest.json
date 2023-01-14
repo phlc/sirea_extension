@@ -1,6 +1,6 @@
 {
-  "name": "React Extension",
-  "description": "Chrome Extension in React!",
+  "name": "Sirea Extension",
+  "description": "A Chrome Extension to automate SIREA's RPV and Precatório migration",
   "version": "1.0.0",
   "manifest_version": 3,
   "icons": {

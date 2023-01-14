@@ -1,12 +1,12 @@
 {
-  "name": "react-chrome-extension",
+  "name": "sirea-extension",
   "version": "1.0.0",
-  "description": "react chrome extension template",
+  "description": "A Chrome Extension to automate SIREA's RPV and Precatório migration",
   "scripts": {
     "start": "webpack --watch --progress --config webpack.dev.js",
     "build": "webpack --watch --progress --config webpack.prod.js"
   },
-  "author": "",
+  "author": "Pedro Carvalho",
   "devDependencies": {
     "@types/chrome": "^0.0.134",
     "@types/react": "^17.0.3",
