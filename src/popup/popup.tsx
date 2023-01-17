@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import './popup.css'
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing'
@@ -9,10 +9,17 @@ import ClearList from '../components/ClearList'
 import BottomMenu from '../components/BottomMenu'
 import { Box, AppBar, Toolbar, TextField } from '@mui/material'
 import DataCard from '../components/DataCard'
+import { getStoredProcesses, setStoredProcesses } from '../utils/storage'
 
 const App: React.FC<{}> = () => {
-  const [processes, setProcesses] = useState([])
-  const [inputList, setInputList] = useState<string>()
+  const [processes, setProcesses] = useState<
+    { number: string; status: string }[]
+  >([])
+  const [inputList, setInputList] = useState<string>('')
+
+  useEffect(() => {
+    getStoredProcesses().then((processes) => setProcesses(processes))
+  }, [])
 
   const createCards = function (event: React.MouseEvent<HTMLButtonElement>) {
     let lines = inputList.split('\n')
@@ -24,16 +31,17 @@ const App: React.FC<{}> = () => {
           '$1-$2.$3.$4.$5.$6'
         )
     )
-    setProcesses(
-      lines.map((line) => ({
-        number: line,
-        status: line.length == 25 ? 'Pendente' : 'Erro',
-      }))
-    )
+    const newCards = lines.map((line) => ({
+      number: line,
+      status: line.length == 25 ? 'Pendente' : 'Erro',
+    }))
+    setStoredProcesses(newCards).then(() => setProcesses(newCards))
   }
 
-  // {number: '0001842-67.2017.5.01.0246',
-  // status: 'Pendente'}
+  // 0001842-67.2017.5.01.0246
+  // 000184297.2017.5.01.0246
+  // 0001842-67.2017.5.01246
+
   return (
     <Box sx={{ width: '500px' }}>
       <AppBar position="sticky" component="nav">
@@ -41,11 +49,20 @@ const App: React.FC<{}> = () => {
           <PrecisionManufacturingIcon />
           <LoadProcesses onClick={createCards} />
           <Migrate />
-          <PrintList />
+          <PrintList
+            onClick={() => {
+              chrome.runtime.sendMessage({
+                print: true,
+                data: processes,
+              })
+            }}
+          />
           <ClearList
             onClick={() => {
-              setInputList('')
-              setProcesses([])
+              setStoredProcesses([]).then(() => {
+                setProcesses([])
+                setInputList('')
+              })
             }}
           />
         </Toolbar>
@@ -72,7 +89,6 @@ const App: React.FC<{}> = () => {
           fullWidth
           rows={4}
           placeholder={'XXXXXXX-XX.XXXX.X.XX.X\nXXXXXXX-XX.XXXX.X.XX.X'}
-          defaultValue=""
           value={inputList}
           onChange={(event) => {
             setInputList(event.target.value)

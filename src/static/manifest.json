@@ -13,7 +13,7 @@
     "default_title": "React Extension",
     "default_icon": "icon.png"
   },
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "storage"],
   "background": {
     "service_worker": "background.js"
   },
