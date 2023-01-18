@@ -5,8 +5,9 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ReportIcon from '@mui/icons-material/Report'
 import WebIcon from '@mui/icons-material/Web'
+import ConsentButton from './ConsentButton'
 
-export default function BottomMenu() {
+export default function BottomMenu(prop) {
   return (
     <BottomNavigation
       showLabels
@@ -14,7 +15,7 @@ export default function BottomMenu() {
         width: '100%',
         position: 'fixed',
         bottom: 0,
-        height: '50px',
+        height: '60px',
       }}
     >
       <BottomNavigationAction
@@ -32,6 +33,7 @@ export default function BottomMenu() {
         label="Termos e Condições"
         icon={<ReportIcon />}
       />
+      <ConsentButton checked={prop.checked} setChecked={prop.setChecked} />
     </BottomNavigation>
   )
 }

@@ -9,7 +9,12 @@ import ClearList from '../components/ClearList'
 import BottomMenu from '../components/BottomMenu'
 import { Box, AppBar, Toolbar, TextField } from '@mui/material'
 import DataCard from '../components/DataCard'
-import { getStoredProcesses, setStoredProcesses } from '../utils/storage'
+import {
+  getStoredProcesses,
+  setStoredProcesses,
+  getStoredConsent,
+  setStoredConsent,
+} from '../utils/storage'
 
 const App: React.FC<{}> = () => {
   const [processes, setProcesses] = useState<
@@ -17,8 +22,14 @@ const App: React.FC<{}> = () => {
   >([])
   const [inputList, setInputList] = useState<string>('')
 
+  const [consent, setConsent] = useState<boolean>(false)
+
   useEffect(() => {
     getStoredProcesses().then((processes) => setProcesses(processes))
+  }, [])
+
+  useEffect(() => {
+    getStoredConsent().then((consent) => setConsent(consent))
   }, [])
 
   const createCards = function (event: React.MouseEvent<HTMLButtonElement>) {
@@ -31,10 +42,12 @@ const App: React.FC<{}> = () => {
           '$1-$2.$3.$4.$5.$6'
         )
     )
-    const newCards = lines.map((line) => ({
-      number: line,
-      status: line.length == 25 ? 'Pendente' : 'Erro',
-    }))
+    const newCards = lines
+      .filter((line) => line.length != 0)
+      .map((line) => ({
+        number: line,
+        status: line.length == 25 ? 'Pendente' : 'Erro',
+      }))
     setStoredProcesses(newCards).then(() => setProcesses(newCards))
   }
 
@@ -95,8 +108,8 @@ const App: React.FC<{}> = () => {
           }}
         />
       </div>
-      <Box sx={{ height: '50px' }}></Box>
-      <BottomMenu />
+      <Box sx={{ height: '60px' }}></Box>
+      <BottomMenu checked={consent} setChecked={setConsent} />
     </Box>
   )
 }
