@@ -21,8 +21,10 @@ const App: React.FC<{}> = () => {
     { number: string; status: string }[]
   >([])
   const [inputList, setInputList] = useState<string>('')
-
   const [consent, setConsent] = useState<boolean>(false)
+  const [tab, setTab] = useState<number>(0)
+  const [migrating, setMigrating] = useState<boolean>(false)
+  const [speed, setSpeed] = useState<number>(1)
 
   useEffect(() => {
     getStoredProcesses().then((processes) => setProcesses(processes))
@@ -49,20 +51,72 @@ const App: React.FC<{}> = () => {
         status: line.length == 25 ? 'Pendente' : 'Erro',
       }))
     setStoredProcesses(newCards).then(() => setProcesses(newCards))
+
+    queryTab()
   }
 
-  // 0001842-67.2017.5.01.0246
-  // 000184297.2017.5.01.0246
-  // 0001842-67.2017.5.01246
+  const queryTab = () => {
+    let tabs = []
+    let id = 0
+    chrome.tabs.query({ active: true }, function (res) {
+      tabs = res
+      for (let i = 0; i < tabs.length; i++) {
+        if (tabs[i].url.includes('sistemas.trf1.jus.br/sirea')) {
+          id = tabs[i].id
+        }
+      }
+      setTab(id)
+    })
+  }
+
+  async function sendToContentScript() {
+    queryTab()
+
+    if (tab != 0) {
+      setMigrating(true)
+      for (let i = 0; i < processes.length; i++) {
+        if (processes[i].status != 'Pendente') {
+          setMigrating(false)
+          continue
+        }
+        chrome.tabs.sendMessage(
+          tab,
+          {
+            name: 'sirea-extension',
+            data: processes[i],
+            speed: speed,
+            index: i,
+          },
+          (res) => {
+            console.log(res.data)
+            processes[i] = res.data
+            setStoredProcesses(processes).then(() => setProcesses(processes))
+            setMigrating(false)
+          }
+        )
+      }
+    }
+  }
+
+  queryTab()
 
   return (
     <Box sx={{ width: '500px' }}>
       <AppBar position="sticky" component="nav">
         <Toolbar>
           <PrecisionManufacturingIcon />
-          <LoadProcesses onClick={createCards} />
-          <Migrate />
+          <LoadProcesses
+            onClick={createCards}
+            disabled={!consent || migrating || processes.length != 0}
+          />
+          <Migrate
+            disabled={
+              !consent || tab === 0 || migrating || processes.length == 0
+            }
+            onClick={sendToContentScript}
+          />
           <PrintList
+            disabled={!consent || migrating}
             onClick={() => {
               chrome.runtime.sendMessage({
                 print: true,
@@ -71,6 +125,7 @@ const App: React.FC<{}> = () => {
             }}
           />
           <ClearList
+            disabled={!consent || migrating}
             onClick={() => {
               setStoredProcesses([]).then(() => {
                 setProcesses([])
@@ -84,6 +139,7 @@ const App: React.FC<{}> = () => {
       {processes.map((process, index) => (
         <DataCard number={process.number} status={process.status} key={index} />
       ))}
+
       <div
         style={{
           display: 'flex',
@@ -109,7 +165,12 @@ const App: React.FC<{}> = () => {
         />
       </div>
       <Box sx={{ height: '60px' }}></Box>
-      <BottomMenu checked={consent} setChecked={setConsent} />
+      <BottomMenu
+        checked={consent}
+        setChecked={setConsent}
+        speedChange={setSpeed}
+        speed={speed}
+      />
     </Box>
   )
 }

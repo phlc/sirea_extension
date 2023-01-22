@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 import { setStoredConsent } from '../utils/storage'
+import { padding } from '@mui/system'
 
 export default function ConsentButton(prop) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,8 +14,14 @@ export default function ConsentButton(prop) {
   return (
     <FormGroup>
       <FormControlLabel
-        style={{ paddingTop: '10px' }}
-        control={<Checkbox checked={prop.checked} onChange={handleChange} />}
+        style={{ paddingTop: '10px', paddingLeft: '2px' }}
+        control={
+          <Checkbox
+            size="small"
+            checked={prop.checked}
+            onChange={handleChange}
+          />
+        }
         label={
           <Typography
             width="70px"

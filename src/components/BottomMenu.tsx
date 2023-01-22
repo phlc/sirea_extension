@@ -6,6 +6,9 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ReportIcon from '@mui/icons-material/Report'
 import WebIcon from '@mui/icons-material/Web'
 import ConsentButton from './ConsentButton'
+import InputLabel from '@mui/material/InputLabel'
+import { FormControl, NativeSelect } from '@mui/material'
+import SpeedSelect from './SpeedSelect'
 
 export default function BottomMenu(prop) {
   return (
@@ -34,6 +37,10 @@ export default function BottomMenu(prop) {
         icon={<ReportIcon />}
       />
       <ConsentButton checked={prop.checked} setChecked={prop.setChecked} />
+      <SpeedSelect
+        speed={prop.speed}
+        speedChange={prop.speedChange}
+      ></SpeedSelect>
     </BottomNavigation>
   )
 }

@@ -5,6 +5,7 @@ import { Button } from '@mui/material'
 function LoadProcesses(prop) {
   return (
     <Button
+      disabled={prop.disabled}
       sx={{ ml: 8 }}
       size="small"
       color="inherit"

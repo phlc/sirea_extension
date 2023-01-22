@@ -1,21 +1,19 @@
-import React from "react";
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import { Button } from "@mui/material";
+import React from 'react'
+import ElectricBoltIcon from '@mui/icons-material/ElectricBolt'
+import { Button } from '@mui/material'
 
-
-
-function Migrate() {
+function Migrate(prop) {
   return (
     <Button
-        sx={
-            {ml:2}
-        }
-        size='small'
-        color="inherit"
-        startIcon={<ElectricBoltIcon />}
-        >
-        Migrar
-    </Button>    
+      onClick={prop.onClick}
+      disabled={prop.disabled}
+      sx={{ ml: 2 }}
+      size="small"
+      color="inherit"
+      startIcon={<ElectricBoltIcon />}
+    >
+      Migrar
+    </Button>
   )
 }
 

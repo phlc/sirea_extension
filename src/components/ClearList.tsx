@@ -5,6 +5,7 @@ import { Button } from '@mui/material'
 function ClearList(prop) {
   return (
     <Button
+      disabled={prop.disabled}
       sx={{ ml: 2 }}
       size="small"
       color="inherit"
