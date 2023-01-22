@@ -1,3 +1,5 @@
+import { tabClasses } from '@mui/material'
+
 export interface LocalStorage {
   processes?: { number: string; status: string }[]
   consent?: boolean
@@ -46,5 +48,28 @@ export function getStoredConsent(): Promise<boolean> {
     chrome.storage.local.get(keys, (res: LocalStorage) => {
       resolve(res.consent ?? false)
     })
+  })
+}
+
+export function sendProcess(
+  tab: number,
+  name: string,
+  data: { number: string; status: string },
+  speed: number,
+  index: number,
+  remove: number
+): Promise<{
+  result: string
+  data: { number: string; status: string }
+  index: number
+}> {
+  return new Promise((resolve) => {
+    chrome.tabs.sendMessage(
+      tab,
+      { name, data, speed, index, remove },
+      (res) => {
+        resolve(res)
+      }
+    )
   })
 }

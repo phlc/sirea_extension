@@ -4,8 +4,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     let process = request.data
     console.log(process)
     speed = request.speed
+    remove = request.remove
     if (process.status === 'Pendente') {
-      process.status = autoClicks(process, speed, request.index, sendResponse)
+      process.status = autoClicks(
+        process,
+        speed,
+        remove,
+        request.index,
+        sendResponse
+      )
     } else {
       sendResponse({
         result: 'data-error',
@@ -36,7 +43,7 @@ function wait(ms) {
   })
 }
 
-async function autoClicks(process, speed, index, sendResponse) {
+async function autoClicks(process, speed, remove, index, sendResponse) {
   try {
     while (document.readyState != 'complete') {}
     const number = process.number
@@ -52,6 +59,8 @@ async function autoClicks(process, speed, index, sendResponse) {
       })
     )
     await wait(500 * speed)
+    modal()
+
     let selector = document.getElementsByClassName('p-dropdown p-component')
     if (selector.length == 1) {
       let [addProc] = document.getElementsByClassName(
@@ -59,6 +68,7 @@ async function autoClicks(process, speed, index, sendResponse) {
       )
       addProc.click()
       await wait(500 * speed)
+
       let np = document.getElementById('inputNumeroProcesso')
       np.value = number
       np.dispatchEvent(
@@ -67,7 +77,8 @@ async function autoClicks(process, speed, index, sendResponse) {
           cancelable: true,
         })
       )
-      await wait(3000 * speed)
+      modal()
+      await wait(2000 * speed)
 
       let [input] = document.getElementsByClassName(
         'input p-inputtext p-component'
@@ -88,6 +99,7 @@ async function autoClicks(process, speed, index, sendResponse) {
           cancelable: true,
         })
       )
+      modal()
       await wait(500 * speed)
 
       if (selector.length != 2) {
@@ -116,31 +128,32 @@ async function autoClicks(process, speed, index, sendResponse) {
 
     let mag = document.querySelector('[aria-label="Magistrado"]')
     mag.click()
-    await wait(3000 * speed)
+    await wait(500 * speed)
+    modal()
+    await wait(1500 * speed)
 
+    modal()
     checkBox = document.getElementsByClassName('p-checkbox-box')
-    if (checkBox[0] == undefined) {
-      console.log('Error')
-    }
     checkBox[0].click()
     await wait(500 * speed)
 
     let btn = document.getElementsByClassName('p-button p-component p-ripple')
     btn[0].click()
-    await wait(3000 * speed)
+    await wait(2000 * speed)
 
     let [cert] = document.getElementsByClassName(
       'botao-acao p-button p-component'
     )
     cert.click()
-    await wait(3000 * speed)
+    await wait(2000 * speed)
 
+    modal()
     let voltar = document.querySelector('[label="Voltar"]')
     await wait(500 * speed)
 
     process.status = 'Migrada'
     voltar.click()
-    await wait(3000 * speed)
+    await wait(2000 * speed)
 
     let [input2] = document.getElementsByClassName(
       'input p-inputtext p-component'
@@ -152,14 +165,16 @@ async function autoClicks(process, speed, index, sendResponse) {
         cancelable: true,
       })
     )
-    await wait(3000 * speed)
-    let [excluir] = document.getElementsByClassName(
-      'ui-button-secondary p-button p-component p-button-icon-only'
-    )
-    // excluir.click()
-    // let confirma = document.querySelector('[label="Confirmar"]')
-    // confirma.click()
-
+    await wait(2000 * speed)
+    if (remove == 1) {
+      let [excluir] = document.getElementsByClassName(
+        'ui-button-secondary p-button p-component p-button-icon-only'
+      )
+      excluir.click()
+      let confirma = document.querySelector('[label="Confirmar"]')
+      confirma.click()
+    }
+    await wait(2000 * speed)
     input2.value = ''
     input2.dispatchEvent(
       new Event('input', {
@@ -168,9 +183,28 @@ async function autoClicks(process, speed, index, sendResponse) {
       })
     )
   } catch {
+    modal()
     await wait(500 * speed)
     let voltar = document.querySelector('[label="Voltar"]')
-    if (voltar) voltar.click()
+    if (voltar) {
+      voltar.click()
+      await wait(2000 * speed)
+      modal()
+    }
+    let [input3] = document.getElementsByClassName(
+      'input p-inputtext p-component'
+    )
+    if (input3) {
+      input3.value = ''
+      input3.dispatchEvent(
+        new Event('input', {
+          bubbles: true,
+          cancelable: true,
+        })
+      )
+      modal()
+    }
+    await wait(500 * speed)
     process.status = 'Erro'
   } finally {
     sendResponse({ result: 'data-ok', data: process, index: index })

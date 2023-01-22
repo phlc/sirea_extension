@@ -3,7 +3,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
-import { setStoredConsent } from '../utils/storage'
+import { setStoredConsent } from '../utils/helpers'
 import { padding } from '@mui/system'
 
 export default function ConsentButton(prop) {
@@ -14,9 +14,10 @@ export default function ConsentButton(prop) {
   return (
     <FormGroup>
       <FormControlLabel
-        style={{ paddingTop: '10px', paddingLeft: '2px' }}
+        style={{ paddingTop: '10px', paddingLeft: '0px' }}
         control={
           <Checkbox
+            disabled={prop.disabled}
             size="small"
             checked={prop.checked}
             onChange={handleChange}
@@ -24,7 +25,7 @@ export default function ConsentButton(prop) {
         }
         label={
           <Typography
-            width="70px"
+            width="65px"
             variant="body2"
             color="textSecondary"
             textAlign="justify"

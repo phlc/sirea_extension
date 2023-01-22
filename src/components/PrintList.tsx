@@ -1,5 +1,5 @@
 import React from 'react'
-import PrintIcon from '@mui/icons-material/Print'
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import { Button } from '@mui/material'
 
 function PrintList(prop) {
@@ -9,10 +9,10 @@ function PrintList(prop) {
       sx={{ ml: 2 }}
       size="small"
       color="inherit"
-      startIcon={<PrintIcon />}
+      startIcon={<PictureAsPdfIcon />}
       onClick={prop.onClick}
     >
-      Imprimir
+      Relatório
     </Button>
   )
 }

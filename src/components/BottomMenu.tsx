@@ -6,9 +6,8 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ReportIcon from '@mui/icons-material/Report'
 import WebIcon from '@mui/icons-material/Web'
 import ConsentButton from './ConsentButton'
-import InputLabel from '@mui/material/InputLabel'
-import { FormControl, NativeSelect } from '@mui/material'
 import SpeedSelect from './SpeedSelect'
+import RemoveSelect from './RemoveSelect'
 
 export default function BottomMenu(prop) {
   return (
@@ -22,25 +21,39 @@ export default function BottomMenu(prop) {
       }}
     >
       <BottomNavigationAction
+        disabled={prop.disabled}
         onClick={Sirea}
         label="Sirea"
         icon={<WebIcon />}
       />
       <BottomNavigationAction
+        disabled={prop.disabled}
         onClick={OpenManual}
         label="Manual"
         icon={<MenuBookIcon />}
       />
       <BottomNavigationAction
+        disabled={prop.disabled}
+        style={{ paddingRight: '10px' }}
         onClick={OpenTerms}
-        label="Termos e Condições"
+        label="Termos"
         icon={<ReportIcon />}
       />
-      <ConsentButton checked={prop.checked} setChecked={prop.setChecked} />
+      <ConsentButton
+        checked={prop.checked}
+        setChecked={prop.setChecked}
+        disabled={prop.disabled}
+      />
       <SpeedSelect
+        disabled={prop.disabled}
         speed={prop.speed}
         speedChange={prop.speedChange}
       ></SpeedSelect>
+      <RemoveSelect
+        disabled={prop.disabled}
+        remove={prop.remove}
+        setRemove={prop.setRemove}
+      ></RemoveSelect>
     </BottomNavigation>
   )
 }

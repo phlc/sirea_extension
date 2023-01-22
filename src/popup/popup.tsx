@@ -7,14 +7,14 @@ import Migrate from '../components/Migrate'
 import PrintList from '../components/PrintList'
 import ClearList from '../components/ClearList'
 import BottomMenu from '../components/BottomMenu'
-import { Box, AppBar, Toolbar, TextField } from '@mui/material'
+import { Box, AppBar, Toolbar, TextField, Alert } from '@mui/material'
 import DataCard from '../components/DataCard'
 import {
   getStoredProcesses,
   setStoredProcesses,
   getStoredConsent,
-  setStoredConsent,
-} from '../utils/storage'
+  sendProcess,
+} from '../utils/helpers'
 
 const App: React.FC<{}> = () => {
   const [processes, setProcesses] = useState<
@@ -25,6 +25,8 @@ const App: React.FC<{}> = () => {
   const [tab, setTab] = useState<number>(0)
   const [migrating, setMigrating] = useState<boolean>(false)
   const [speed, setSpeed] = useState<number>(1)
+  const [remove, setRemove] = useState<number>(0)
+  const [errorCondition, setErrorCondition] = useState<boolean>(false)
 
   useEffect(() => {
     getStoredProcesses().then((processes) => setProcesses(processes))
@@ -73,27 +75,32 @@ const App: React.FC<{}> = () => {
     queryTab()
 
     if (tab != 0) {
-      setMigrating(true)
-      for (let i = 0; i < processes.length; i++) {
-        if (processes[i].status != 'Pendente') {
-          setMigrating(false)
-          continue
-        }
-        chrome.tabs.sendMessage(
-          tab,
-          {
-            name: 'sirea-extension',
-            data: processes[i],
-            speed: speed,
-            index: i,
-          },
-          (res) => {
-            console.log(res.data)
-            processes[i] = res.data
-            setStoredProcesses(processes).then(() => setProcesses(processes))
-            setMigrating(false)
+      try {
+        setMigrating(true)
+        for (let i = 0; i < processes.length; i++) {
+          if (processes[i].status != 'Pendente') {
+            continue
           }
-        )
+          const res = await sendProcess(
+            tab,
+            'sirea-extension',
+            processes[i],
+            speed,
+            i,
+            remove
+          )
+          processes[i] = res.data
+          await setStoredProcesses(processes)
+          setProcesses([...processes])
+          window.scrollTo({
+            top: 105 * i,
+            behavior: 'smooth',
+          })
+        }
+      } catch {
+        setErrorCondition(true)
+      } finally {
+        setMigrating(false)
       }
     }
   }
@@ -135,11 +142,18 @@ const App: React.FC<{}> = () => {
           />
         </Toolbar>
       </AppBar>
-
+      <div>
+        <Alert
+          sx={{ display: errorCondition ? {} : { xs: 'none', md: 'block' } }}
+          severity="error"
+          variant="filled"
+        >
+          Erro de Inesperado. Reinicie o Navegador
+        </Alert>
+      </div>
       {processes.map((process, index) => (
         <DataCard number={process.number} status={process.status} key={index} />
       ))}
-
       <div
         style={{
           display: 'flex',
@@ -166,10 +180,13 @@ const App: React.FC<{}> = () => {
       </div>
       <Box sx={{ height: '60px' }}></Box>
       <BottomMenu
+        disabled={migrating}
         checked={consent}
         setChecked={setConsent}
         speedChange={setSpeed}
         speed={speed}
+        remove={remove}
+        setRemove={setRemove}
       />
     </Box>
   )
