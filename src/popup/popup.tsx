@@ -144,11 +144,15 @@ const App: React.FC<{}> = () => {
       </AppBar>
       <div>
         <Alert
-          sx={{ display: errorCondition ? {} : { xs: 'none', md: 'block' } }}
+          sx={{
+            display: errorCondition ? {} : { xs: 'none', md: 'block' },
+            margin: 1,
+          }}
           severity="error"
           variant="filled"
         >
-          Erro de Inesperado. Reinicie o Navegador
+          Erro de Conexão com Sirea. Verifique os processos manualmente e, se
+          necessário, Reinicie o navegador.
         </Alert>
       </div>
       {processes.map((process, index) => (
