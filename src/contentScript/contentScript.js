@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     let process = request.data
     console.log(process)
     speed = request.speed
-    remove = request.remove
+    let remove = request.remove
     if (process.status === 'Pendente') {
       process.status = autoClicks(
         process,
@@ -145,7 +145,7 @@ async function autoClicks(process, speed, remove, index, sendResponse) {
       'botao-acao p-button p-component'
     )
     cert.click()
-    await wait(2000 * speed)
+    await wait(8000 * speed)
 
     modal()
     let voltar = document.querySelector('[label="Voltar"]')
@@ -171,10 +171,13 @@ async function autoClicks(process, speed, remove, index, sendResponse) {
         'ui-button-secondary p-button p-component p-button-icon-only'
       )
       excluir.click()
+      await wait(500 * speed)
+
       let confirma = document.querySelector('[label="Confirmar"]')
       confirma.click()
+      await wait(2000 * speed)
     }
-    await wait(2000 * speed)
+
     input2.value = ''
     input2.dispatchEvent(
       new Event('input', {
@@ -191,6 +194,37 @@ async function autoClicks(process, speed, remove, index, sendResponse) {
       await wait(2000 * speed)
       modal()
     }
+    console.log(remove)
+    if (remove == 1) {
+      let [input2] = document.getElementsByClassName(
+        'input p-inputtext p-component'
+      )
+      if (input2) {
+        input2.value = process.number
+        input2.dispatchEvent(
+          new Event('input', {
+            bubbles: true,
+            cancelable: true,
+          })
+        )
+        await wait(2000 * speed)
+      }
+
+      let [excluir] = document.getElementsByClassName(
+        'ui-button-secondary p-button p-component p-button-icon-only'
+      )
+      if (excluir) {
+        excluir.click()
+        await wait(500 * speed)
+
+        let confirma = document.querySelector('[label="Confirmar"]')
+        if (confirma) {
+          confirma.click()
+          await wait(2000 * speed)
+        }
+      }
+    }
+
     let [input3] = document.getElementsByClassName(
       'input p-inputtext p-component'
     )

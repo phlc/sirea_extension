@@ -93,12 +93,16 @@ const App: React.FC<{}> = () => {
           await setStoredProcesses(processes)
           setProcesses([...processes])
           window.scrollTo({
-            top: 105 * i,
+            top: 103 * i,
             behavior: 'smooth',
           })
         }
       } catch {
         setErrorCondition(true)
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
       } finally {
         setMigrating(false)
       }
@@ -151,8 +155,10 @@ const App: React.FC<{}> = () => {
           severity="error"
           variant="filled"
         >
-          Erro de Conexão com Sirea. Verifique os processos manualmente e, se
-          necessário, Reinicie o navegador.
+          Erro de Conexão com o Sirea. Ao clicar em MIGRAR de novo, a extensão
+          retoma de onde parou. Se preciso, abra e feche a extensão e tente
+          MIGRAR novamente. Caso a falha permaneça, SALVE o relatório, e
+          reinicie o navegador.
         </Alert>
       </div>
       {processes.map((process, index) => (
