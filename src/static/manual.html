@@ -15,11 +15,10 @@
         A presente extensão tem por objetivo automatizar as migrações de RPVs e
         Precatórios realizadas através do sistema Sirea. Trata-se de uma solução
         provisória, imperfeita, até que seja disponibilizada a migração em lote,
-        tal como era possível no sistema Oracle. Além disso, a extensão também
-        realiza a inclusão automática de processos para o magistrado, caso o
-        processo não esteja incluído. Além disso, é possível habilitar a
-        exclusão automática do processo da lista do magistrado ao final do
-        processo de migração.
+        tal como era possível no sistema Oracle. Além disso, a extensão realiza
+        a inclusão automática de processos para o magistrado, caso o processo
+        não esteja incluído.Também é possível habilitar a exclusão automática do
+        processo da lista do magistrado ao final do processo de migração.
       </p>
       <h4><u>Forma de Funcionamento:</u></h4>
       <p>
@@ -32,9 +31,9 @@
         A extensão não envia qualquer dado para servidores de terceiros, não
         armazena senhas ou dados pessoais. Para comodidade, apenas a declaração
         de leitura e concordância com os termos de utilização e a lista de
-        processos e seus status são armazenada no repositório local do navegador
-        Chrome.A esses dados, apenas o usuário tem acesso e podem ser apagados a
-        qualquer momento através da desistalação da extensão.
+        processos e seus status são armazenadas no repositório local do
+        navegador Chrome. A esses dados, apenas o usuário tem acesso e podem ser
+        apagados a qualquer momento através da desistalação da extensão.
       </p>
       <h4><u>Limitações:</u></h4>
       <p>
@@ -44,7 +43,7 @@
         temporizadores foram configurados de forma a aguardar esse carregamento.
         No entanto, caso o sistema esteja sobrecarregado, a sequêcia de clicks
         pode falhar, gerando um status de erro. Não há qualquer invalidação do
-        processo no sistema, basta reiniciar o processo de migração, através da
+        processo no sistema, basta reiniciar o processo de migração através da
         extensão ou manualmente. Nesses casos é possível aumentar o tempo entre
         clicks através da opção velocidade. Porém, isso pode gerar falha na
         comunicação entre a extensão e o site do Sirea.
@@ -54,6 +53,12 @@
         é feita qualquer validação de números de processos, decurso de prazo,
         disponibilização de RPV ou Precatório para migração. Única validação
         realizada é quanto ao número de dígitos de cada entrada fornecida.
+        <b
+          >Cabe ao usuário a conferência de todos os dados e situação dos
+          processos, antes e depois da migração, tais como número do processo,
+          decurso de prazo, concordância das partes, efetiva migração e etc. não
+          havendo qualquer garantia de funcionamento por parte da extensão.</b
+        >
       </p>
     </div>
 
@@ -109,8 +114,11 @@
         caracteres numéricos, seu status será de erro.
       </p>
       <img src="img/carregado.gif" alt="Componetes" width="400" height="450" />
+
       <p>
-        <p><b>2) Migração</b></p>
+        <b>2) Migração</b>
+      </p>
+      <p>
         Caso já não esteja logado e com a página do Sirea em primeiro plano,
         deve-se clicar no ícone do Sirea, logar e reabrir a extensão. As popups
         de extensões somente ficam abertas em primeiro plano e são reiniciadas
@@ -136,7 +144,7 @@
       <p>
         <b
           >Processos com status de "Erro" ou "Migrada" não são enviados para
-          migração
+          migração.
         </b>
       </p>
       <img
@@ -147,38 +155,68 @@
       />
       <p>
         Acionado o botão de migração, os botões da extensão ficam indisponíveis
-        até o final do processo. Ao final o relatório pode ser gerado em nova
-        aba. A partir dessa aba pode ser gerado um pdf ou sua impressão.
-      </p>
-      <p>
-        <b>IMPORTANTE: Como </b>
+        até o final do processo.
       </p>
       <p><b>3) Relatório</b></p>
+      <p>
+        Ao final, o relatório pode ser gerado em nova aba. A partir dessa aba
+        pode ser gerado um pdf ou sua impressão.
+      </p>
       <img src="img/relatorio.gif" alt="Componetes" width="700" height="500" />
 
-      <p>lkashdfkljahsdk</p>
-      <p>lajkfshdlkfj</p>
-      <p>;lafksjdlkfjlsd</p>
+      <p>
+        <b
+          >IMPORTANTE: Como a extensão não tem acesso ao servidor oficial, é
+          possível que haja inconsistência entre o relatório gerado e o efetivo
+          status do processo. É necessária a conferência de todos os dados, não
+          havendo qualquer garantia de funcionamento por parte da extensão.</b
+        >
+      </p>
     </div>
 
-    <h3><u>Erros</u>:</h3>
+    <h3><u>Erros Comuns</u>:</h3>
     <div style="text-align: justify; padding-left: 30px; padding-right: 50px">
       <h4><u>Erro no Status:</u></h4>
-      <p>lkashdfkljahsdk</p>
-      <p>lajkfshdlkfj</p>
-      <p>;lafksjdlkfjlsd</p>
+      <p>
+        "Erro" no status do processo antes mesmo da tentativa de migração
+        significa que o número fornecido não contém a quantidade correta de
+        caracteres numéricos.
+      </p>
+      <p>
+        Após a tentativa de migração, significa que a sequência de automação de
+        clicks não chegou até o final. Isso pode ocorrer se o processo não foi
+        encontra ou se não há RPV ou precatório para ser migrado. Porém, a
+        hipótese mais provável é que a RPV ou precatório já tenha sido migrada.
+      </p>
       <h4><u>Status "Migrada" mas RPV não migrada:</u></h4>
-      <p>lkashdfkljahsdk</p>
-      <p>lajkfshdlkfj</p>
-      <p>;lafksjdlkfjlsd</p>
+      <p>
+        Novamente, como a extensão não tem acesso aos servidores do Sirea, todo
+        o fluxo de automação de clicks é feito através de temporizadores. Se o
+        sistema estiver lento, pode acontecer de a sequência de clicks chegar
+        até o final, gerando um status de "migrada", sem que isso corresponda a
+        realidade. É sempre necessário que haja confêrencia por parte do
+        usuário.
+      </p>
+      <p><b>Não é dada qualquer garantia de funcionamento.</b></p>
       <h4><u>Aviso de Falha de Conexão:</u></h4>
-      <p>lkashdfkljahsdk</p>
-      <p>lajkfshdlkfj</p>
-      <p>;lafksjdlkfjlsd</p>
+      <p>
+        Por algum motivo desconhecido, em sua maioria das vezes quando se tenta
+        migrar uma RPV ou precatório já migrado, pode haver uma falha de conexão
+        entre a extensão e o site do Sirea. Nesse caso, basta clicar novamente
+        em migrar que o processo é reiniciado de onde parou, gerando um status
+        de "Erro" no último processo tentado. Caso a falha de conexão permaneça
+        feche e reabra a extensão. Se necessário, reinicie o navegador.
+      </p>
+      <p>
+        Repise-se, é sempre necessário que haja confêrencia por parte do
+        usuário. <b>Não é dada qualquer garantia de funcionamento.</b>
+      </p>
       <h4><u>Extensão não abre:</u></h4>
-      <p>lkashdfkljahsdk</p>
-      <p>lajkfshdlkfj</p>
-      <p>;lafksjdlkfjlsd</p>
+      <p>
+        Significa que os dados armazenados foram corrompidos. Nesse caso,
+        deve-se desinstalar (o que apaga todos os dados armazenados) e
+        reinstalar a extensão.
+      </p>
     </div>
   </body>
 </html>
